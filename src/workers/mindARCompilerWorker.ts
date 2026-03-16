@@ -6,15 +6,23 @@ declare const self: DedicatedWorkerGlobalScope
 self.onmessage = async (e: MessageEvent<{ imageFile: File }>) => {
   const { imageFile } = e.data
   try {
-    self.postMessage({ type: 'progress', data: { progress: 5, phase: 'Initializing MindAR compiler...' } })
+    self.postMessage({ type: 'progress', data: { progress: 5, phase: 'Initializing local MindAR compiler...' } })
 
-    // Load MindAR compiler via importScripts (CDN)
-    // We use the production bundle that exports Compiler
-    // @ts-ignore
-    importScripts('https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image.prod.js')
+    // Load MindAR compiler from local public directory
+    try {
+      importScripts('/libs/mindar-image.js')
+    } catch (err) {
+      console.error('Failed to load local MindAR script:', err)
+      throw new Error('MindAR compiler script could not be loaded from local path. Check public/libs/mindar-image.js exists.')
+    }
 
-    // @ts-ignore - MindAR is loaded globally
-    const { Compiler } = MINDAR
+    // @ts-ignore - MINDAR is loaded globally via importScripts
+    const MINDAR_BASE = self.MINDAR || (self as any).MINDAR
+    if (!MINDAR_BASE || !MINDAR_BASE.IMAGE || !MINDAR_BASE.IMAGE.Compiler) {
+      throw new Error('MindAR compiler failed to initialize correctly from the loaded script.')
+    }
+
+    const { Compiler } = MINDAR_BASE.IMAGE
 
     self.postMessage({ type: 'progress', data: { progress: 10, phase: 'Reading image...' } })
 
