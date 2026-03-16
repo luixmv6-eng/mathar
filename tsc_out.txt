@@ -1,0 +1,7 @@
+src/lib/supabase.ts(3,33): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+src/lib/supabase.ts(4,37): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+src/pages/ar-viewer/ARViewerPage.tsx(37,24): error TS2554: Expected 1 arguments, but got 0.
+src/pages/ar-viewer/ARViewerPage.tsx(49,13): error TS2345: Argument of type '() => () => Promise<void>' is not assignable to parameter of type 'EffectCallback'.
+  Type '() => Promise<void>' is not assignable to type 'void | Destructor'.
+    Type '() => Promise<void>' is not assignable to type 'Destructor'.
+      Type 'Promise<void>' is not assignable to type 'void | { [UNDEFINED_VOID_ONLY]: never; }'.
