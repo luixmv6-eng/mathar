@@ -96,10 +96,10 @@ export default function AuthPage() {
             {/* Email */}
             <div>
               <label className="block text-xs font-medium mb-1.5" style={{ color: 'var(--color-text-muted)' }}>Email</label>
-              <div className="relative">
-                <Mail size={15} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--color-text-muted)' }} />
+              <div className="relative flex items-center">
+                <Mail size={15} className="absolute left-3" style={{ color: 'var(--color-text-muted)', pointerEvents: 'none' }} />
                 <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required
-                  className="input pl-9" placeholder="you@example.com" />
+                  className="input pl-10 h-11" placeholder="you@example.com" />
               </div>
             </div>
 
@@ -107,11 +107,11 @@ export default function AuthPage() {
             {mode !== 'forgot' && (
               <div>
                 <label className="block text-xs font-medium mb-1.5" style={{ color: 'var(--color-text-muted)' }}>Password</label>
-                <div className="relative">
-                  <Lock size={15} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--color-text-muted)' }} />
+                <div className="relative flex items-center">
+                  <Lock size={15} className="absolute left-3" style={{ color: 'var(--color-text-muted)', pointerEvents: 'none' }} />
                   <input type={showPw ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} required
-                    className="input pl-9 pr-10" placeholder="••••••••" minLength={6} />
-                  <button type="button" onClick={() => setShowPw(!showPw)} className="absolute right-3 top-1/2 -translate-y-1/2"
+                    className="input pl-10 pr-10 h-11" placeholder="••••••••" minLength={6} />
+                  <button type="button" onClick={() => setShowPw(!showPw)} className="absolute right-3 flex items-center justify-center h-full"
                     style={{ color: 'var(--color-text-muted)', background: 'none', border: 'none', cursor: 'pointer' }}>
                     {showPw ? <EyeOff size={15} /> : <Eye size={15} />}
                   </button>

@@ -1,6 +1,7 @@
 import { Link, useLocation } from 'react-router-dom'
-import { LayoutDashboard, FolderOpen, Settings, Shield, LogOut, Cpu } from 'lucide-react'
+import { LayoutDashboard, FolderOpen, Settings, Shield, LogOut, Cpu, HelpCircle } from 'lucide-react'
 import { useAuthStore } from '@/stores/authStore'
+import { useAppStore } from '@/stores/appStore'
 import { motion } from 'framer-motion'
 
 const navItems = [
@@ -12,6 +13,7 @@ const navItems = [
 export function Sidebar() {
   const location = useLocation()
   const { user, signOut } = useAuthStore()
+  const { resetTour } = useAppStore()
   const isAdmin = (user?.app_metadata as any)?.role === 'superadmin'
 
   return (
@@ -49,6 +51,17 @@ export function Sidebar() {
             </Link>
           )
         })}
+        {/* Help button */}
+        <button onClick={resetTour} className="w-full text-left">
+          <motion.div
+            whileHover={{ x: 3 }}
+            className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all text-sm font-medium"
+            style={{ color: 'var(--color-text-muted)' }}
+          >
+            <HelpCircle size={16} />
+            Help & Tour
+          </motion.div>
+        </button>
         {isAdmin && (
           <Link to="/admin">
             <motion.div whileHover={{ x: 3 }} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium"

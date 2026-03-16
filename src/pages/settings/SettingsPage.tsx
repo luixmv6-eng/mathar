@@ -1,16 +1,17 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { User, Lock, Trash2, HardDrive } from 'lucide-react'
+import { User, Lock, Trash2, HardDrive, HelpCircle, BookOpen } from 'lucide-react'
 import { useAuthStore } from '@/stores/authStore'
+import { useAppStore } from '@/stores/appStore'
 import { supabase } from '@/lib/supabase'
 import { toast } from 'sonner'
 import { useNavigate } from 'react-router-dom'
 
 export default function SettingsPage() {
   const { user, signOut } = useAuthStore()
+  const { resetTour } = useAppStore()
   const navigate = useNavigate()
   const [displayName, setDisplayName] = useState(user?.user_metadata?.full_name ?? '')
-  const [currentPw, setCurrentPw] = useState('')
   const [newPw, setNewPw] = useState('')
   const [savingName, setSavingName] = useState(false)
   const [savingPw, setSavingPw] = useState(false)
@@ -25,7 +26,7 @@ export default function SettingsPage() {
   const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault(); setSavingPw(true)
     const { error } = await supabase.auth.updateUser({ password: newPw })
-    if (error) toast.error(error.message); else { toast.success('Password changed!'); setCurrentPw(''); setNewPw('') }
+    if (error) toast.error(error.message); else { toast.success('Password changed!'); setNewPw('') }
     setSavingPw(false)
   }
 
@@ -39,11 +40,39 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="p-6 max-w-2xl mx-auto w-full">
+    <div className="p-6 max-w-2xl mx-auto w-full pb-24 md:pb-8">
       <motion.h1 initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-2xl font-bold mb-8"
         style={{ fontFamily: 'var(--font-display)' }}>Settings</motion.h1>
 
       <div className="space-y-5">
+        {/* Help & Support */}
+        <div className="glass rounded-2xl p-6 border-cyan-400/10">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'rgba(0,245,255,0.1)' }}>
+              <HelpCircle size={16} style={{ color: 'var(--color-cyan)' }} />
+            </div>
+            <h2 className="font-bold" style={{ fontFamily: 'var(--font-display)' }}>Help & Support</h2>
+          </div>
+          
+          <div className="space-y-4 mb-6">
+            <div className="flex gap-3">
+              <div className="mt-1"><BookOpen size={14} className="text-cyan-400" /></div>
+              <div>
+                <p className="text-sm font-medium">How it works</p>
+                <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text-muted)' }}>
+                  AR Vision allows you to bind 3D overlays and media to physical images. 
+                  Upload a target image, add your media in the editor, and use the AR Viewer to see it in space.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <button onClick={resetTour} className="btn btn-ghost w-full !justify-center gap-2">
+            <HelpCircle size={16} />
+            Show Interactive Tour
+          </button>
+        </div>
+
         {/* Profile */}
         <div className="glass rounded-2xl p-6">
           <div className="flex items-center gap-3 mb-5">

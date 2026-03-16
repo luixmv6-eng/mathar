@@ -3,6 +3,7 @@ import { Sidebar } from './Sidebar'
 import { BottomNav } from './BottomNav'
 import { useAuthStore } from '@/stores/authStore'
 import { Toaster } from 'sonner'
+import AppTour from '@/components/common/AppTour'
 
 export function AppLayout() {
   const { user, loading } = useAuthStore()
@@ -27,6 +28,7 @@ export function AppLayout() {
         <Outlet />
       </main>
       <BottomNav />
+      <AppTour />
       <Toaster theme="dark" richColors position="top-right" />
     </div>
   )

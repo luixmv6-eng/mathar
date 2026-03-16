@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { Plus, Search, LayoutGrid, List, Target, Users, Eye, Trash2, MoreVertical, FolderOpen } from 'lucide-react'
 import { useProjectStore, type ARProject } from '@/stores/projectStore'
 import { useAuthStore } from '@/stores/authStore'
+import { useAppStore } from '@/stores/appStore'
 import { formatDate } from '@/lib/utils'
 import { toast } from 'sonner'
 
@@ -11,13 +12,19 @@ export default function DashboardPage() {
   const navigate = useNavigate()
   const { user } = useAuthStore()
   const { projects, loading, fetchProjects, createProject, deleteProject } = useProjectStore()
+  const { hasSeenTour, setTourOpen } = useAppStore()
   const [search, setSearch] = useState('')
   const [view, setView] = useState<'grid' | 'list'>('grid')
   const [creating, setCreating] = useState(false)
   const [newName, setNewName] = useState('')
   const [showCreate, setShowCreate] = useState(false)
 
-  useEffect(() => { fetchProjects() }, [])
+  useEffect(() => {
+    fetchProjects()
+    if (!hasSeenTour) {
+      setTourOpen(true)
+    }
+  }, [])
 
   const filtered = projects.filter((p) =>
     p.name.toLowerCase().includes(search.toLowerCase()) ||
