@@ -20,7 +20,12 @@ self.onmessage = async (e: MessageEvent<{ imageFile: File }>) => {
 
     const compiler = new Compiler()
 
-    const imageData = await fileToImageData(imageFile)
+    const bitmap = await createImageBitmap(imageFile)
+    const canvas = new OffscreenCanvas(bitmap.width, bitmap.height)
+    const ctx = canvas.getContext('2d')
+    if (!ctx) throw new Error('Could not get 2d context')
+    ctx.drawImage(bitmap, 0, 0)
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
 
     self.postMessage({ type: 'progress', data: { progress: 20, phase: 'Compiling image targets...' } })
 
@@ -40,18 +45,4 @@ self.onmessage = async (e: MessageEvent<{ imageFile: File }>) => {
   } catch (err: any) {
     self.postMessage({ type: 'error', data: err?.message ?? 'Compilation failed' })
   }
-}
-
-async function fileToImageData(file: File): Promise<HTMLImageElement> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      const img = new Image()
-      img.onload = () => resolve(img)
-      img.onerror = reject
-      img.src = e.target?.result as string
-    }
-    reader.onerror = reject
-    reader.readAsDataURL(file)
-  })
 }

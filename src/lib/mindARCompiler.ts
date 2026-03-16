@@ -20,7 +20,7 @@ export async function compileMindFile(
   return new Promise((resolve, reject) => {
     const worker = new Worker(
       new URL('../workers/mindARCompilerWorker.ts', import.meta.url),
-      { type: 'module' }
+      { type: 'classic' }
     )
 
     worker.onmessage = (e) => {
