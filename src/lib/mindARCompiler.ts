@@ -41,6 +41,7 @@ export async function compileMindFile(
       worker.terminate()
     }
 
-    worker.postMessage({ imageFile })
+    const libUrl = new URL(`${import.meta.env.BASE_URL || '/'}libs/mindar-image.js`, window.location.origin).href
+    worker.postMessage({ imageFile, libUrl })
   })
 }
